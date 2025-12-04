@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FormatType, FormatterState, FormatterError } from './types';
-import type { IndentSize, ValidationResult } from './types/json-advanced';
+import type { IndentSize, ValidationResult, ViewMode } from './types/json-advanced';
 import { MAX_FILE_SIZE } from './types';
 import { calculateByteSize } from './utils/validation';
 import {
@@ -15,13 +15,14 @@ import { formatXML } from './services/xmlFormatter';
 import { formatYAML } from './services/yamlFormatter';
 import { formatCSV } from './services/csvFormatter';
 import { formatSQL } from './services/sqlFormatter';
-import { loadIndentSize } from './utils/storage';
+import { loadIndentSize, loadViewMode, saveViewMode } from './utils/storage';
 import { useDebounce } from './hooks/useDebounce';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import { Tabs } from './components/Tabs';
 import { ControlBar } from './components/JsonPanel/ControlBar';
+import ViewModeSwitcher from './components/JsonPanel/ViewModeSwitcher';
 import './index.css';
 
 const createInitialFormatterState = (format: FormatType): FormatterState => ({
@@ -34,6 +35,7 @@ function App() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<FormatType>('json');
   const [indentSize, setIndentSize] = useState<IndentSize>(() => loadIndentSize());
+  const [viewMode, setViewMode] = useState<ViewMode>(() => loadViewMode());
   const [formatters, setFormatters] = useState<Record<FormatType, FormatterState>>({
     json: createInitialFormatterState('json'),
     xml: createInitialFormatterState('xml'),
@@ -46,6 +48,11 @@ function App() {
   const [validationResult, setValidationResult] =
     useState<ValidationResult | null>(null);
   const [isFixing, setIsFixing] = useState(false);
+
+  // User Story 3: 持久化檢視模式
+  useEffect(() => {
+    saveViewMode(viewMode);
+  }, [viewMode]);
 
   useEffect(() => {
     const saved = localStorage.getItem('data-formatter-active-tab');
@@ -358,18 +365,24 @@ function App() {
 
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* 僅在 JSON tab 顯示 ControlBar (User Story 1) */}
+      {/* 僅在 JSON tab 顯示 ControlBar 和 ViewModeSwitcher (User Stories 1 & 3) */}
       {activeTab === 'json' && (
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 1rem' }}>
-          <ControlBar
-            indentSize={indentSize}
-            onIndentChange={setIndentSize}
-            onClear={handleClear}
-            onFormat={handleManualFormat}
-            onMinify={handleMinify}
-            disabled={currentFormatter.isFormatting}
-            hasInput={!!currentFormatter.input.rawText.trim()}
-          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+            <ControlBar
+              indentSize={indentSize}
+              onIndentChange={setIndentSize}
+              onClear={handleClear}
+              onFormat={handleManualFormat}
+              onMinify={handleMinify}
+              disabled={currentFormatter.isFormatting}
+              hasInput={!!currentFormatter.input.rawText.trim()}
+            />
+            <ViewModeSwitcher
+              currentMode={viewMode}
+              onModeChange={setViewMode}
+            />
+          </div>
         </div>
       )}
 
@@ -385,6 +398,7 @@ function App() {
             validationResult={activeTab === 'json' ? validationResult : null}
             onAutoFix={activeTab === 'json' ? handleAutoFix : undefined}
             isFixing={isFixing}
+            viewMode={activeTab === 'json' ? viewMode : 'code'}
           />
         </div>
       </main>
