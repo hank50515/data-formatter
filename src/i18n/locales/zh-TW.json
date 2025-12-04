@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "資料格式化工具",
+    "subtitle": "支援 JSON、XML、YAML、CSV、SQL 多種格式"
+  },
+  "input": {
+    "title": "輸入",
+    "placeholder": "貼上您的 JSON 資料...",
+    "characters": "字元數：{{count}}",
+    "size": "大小：{{size}} KB"
+  },
+  "output": {
+    "title": "輸出",
+    "format": "格式：{{format}}",
+    "lines": "行數：{{count}}",
+    "characters": "字元數：{{count}}",
+    "empty": "格式化結果將顯示在這裡"
+  },
+  "copy": {
+    "button": "複製",
+    "success": "已複製",
+    "error": "複製失敗，請手動複製"
+  },
+  "error": {
+    "prefix": "錯誤：",
+    "location": "位置：第 {{line}} 行",
+    "locationFull": "位置：第 {{line}} 行, 第 {{column}} 列",
+    "sizeLimit": "輸入檔案過大（{{size}} MB），最大支援 1 MB",
+    "invalidFormat": "無法偵測格式，請確認輸入為有效的 JSON 資料",
+    "unknown": "發生未知錯誤"
+  },
+  "language": {
+    "switch": "語言",
+    "zhTW": "繁體中文",
+    "en": "English"
+  },
+  "visitor": {
+    "count": "訪客人數：{{count}}"
+  },
+  "footer": {
+    "copyright": "© 2025 JSON 格式化工具"
+  },
+  "tabs": {
+    "json": "JSON",
+    "xml": "XML",
+    "yaml": "YAML",
+    "csv": "CSV",
+    "sql": "SQL"
+  }
+}

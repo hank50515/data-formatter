@@ -1,0 +1,50 @@
+{
+  "app": {
+    "title": "Data Formatter",
+    "subtitle": "Supports JSON, XML, YAML, CSV, and SQL formats"
+  },
+  "input": {
+    "title": "Input",
+    "placeholder": "Paste your JSON data...",
+    "characters": "Characters: {{count}}",
+    "size": "Size: {{size}} KB"
+  },
+  "output": {
+    "title": "Output",
+    "format": "Format: {{format}}",
+    "lines": "Lines: {{count}}",
+    "characters": "Characters: {{count}}",
+    "empty": "Formatted result will be displayed here"
+  },
+  "copy": {
+    "button": "Copy",
+    "success": "Copied",
+    "error": "Copy failed, please copy manually"
+  },
+  "error": {
+    "prefix": "Error:",
+    "location": "Location: Line {{line}}",
+    "locationFull": "Location: Line {{line}}, Column {{column}}",
+    "sizeLimit": "Input file too large ({{size}} MB), maximum supported is 1 MB",
+    "invalidFormat": "Unable to detect format, please ensure input is valid JSON data",
+    "unknown": "An unknown error occurred"
+  },
+  "language": {
+    "switch": "Language",
+    "zhTW": "繁體中文",
+    "en": "English"
+  },
+  "visitor": {
+    "count": "Visitors: {{count}}"
+  },
+  "footer": {
+    "copyright": "© 2025 JSON Formatter"
+  },
+  "tabs": {
+    "json": "JSON",
+    "xml": "XML",
+    "yaml": "YAML",
+    "csv": "CSV",
+    "sql": "SQL"
+  }
+}

@@ -1,0 +1,130 @@
+/**
+ * T051: Tabs 元件樣式 - 增強分頁互動體驗
+ *
+ * 過渡動畫策略：
+ * - 使用明確的 CSS 屬性過渡（避免 transition: all）以優化效能
+ * - 過渡時間設定為 200ms（符合 150-300ms 規格要求）
+ * - 緩動函數使用 ease-in-out 提供自然的視覺感受
+ *
+ * 效能優化：
+ * - GPU 加速屬性：transform, opacity（避免觸發重排 reflow）
+ * - will-change: transform 提示瀏覽器預先優化
+ * - 避免使用 width, height, margin 等觸發重排的屬性
+ *
+ * 無障礙支援：
+ * - :focus 狀態有明顯 2px 藍色外框（符合 WCAG 2.1 Level AA）
+ * - @media (prefers-reduced-motion) 尊重使用者減少動畫的偏好設定
+ * - 顏色對比度 >= 4.5:1（符合 WCAG 2.1 Level AA 標準）
+ *
+ * 響應式設計：
+ * - @media (hover: hover) 確保懸停效果僅在桌面裝置顯示
+ * - @media (max-width: 600px) 提供行動裝置最佳化樣式
+ * - 支援最小寬度 320px 的行動裝置
+ */
+
+.tabs-container {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  padding: 8px 8px 0 8px;
+  border-radius: 8px 8px 0 0;
+}
+
+/* T013: CSS transition properties - 特定屬性過渡，避免使用 all 以優化效能 */
+.tab {
+  padding: 12px 24px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  /* 使用具體屬性過渡而非 all，優化 GPU 加速 */
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    transform 0.2s ease-in-out,
+    font-weight 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  position: relative;
+  bottom: -2px;
+  /* 啟用 GPU 加速以提升動畫效能 */
+  will-change: transform;
+}
+
+/* T030, T031: 懸停效果 - 僅在支援懸停的裝置顯示（桌面） */
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover {
+    background-color: #ebebeb;
+    color: #333;
+  }
+
+  /* T033: 啟用分頁的懸停效果應與非啟用分頁不同 */
+  .tab.active:hover {
+    /* 啟用分頁懸停時保持白色背景，但稍微增強陰影 */
+    background-color: #fff;
+    box-shadow: 0 -3px 12px rgba(25, 118, 210, 0.15);
+  }
+}
+
+/* T032: :active 偽類 - 為觸控裝置提供即時回饋 */
+.tab:active {
+  background-color: #d0d0d0;
+  transform: scale(0.98);
+}
+
+.tab.active:active {
+  /* 啟用分頁被按下時的回饋 */
+  background-color: #f5f5f5;
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* T014: .tab.active 視覺屬性 - 白色背景、藍色邊框、藍色文字、粗體 */
+/* T015: .tab 預設狀態已在上方定義 */
+/* T016: transform 動畫 - 啟用時輕微上移以增強視覺回饋 */
+.tab.active {
+  background-color: #fff;
+  color: #1976d2;
+  border-bottom-color: #1976d2;
+  font-weight: 600;
+  /* 輕微上移動畫，提供視覺深度感 */
+  transform: translateY(-2px);
+  /* 添加微妙陰影以增強啟用狀態的視覺層次 */
+  box-shadow: 0 -2px 8px rgba(25, 118, 210, 0.1);
+}
+
+.tab:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* T038: 尊重使用者的動畫偏好設定（無障礙功能）*/
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+
+  .tab.active {
+    /* 保持視覺狀態但移除動畫 */
+    transform: none;
+  }
+}
+
+/* 響應式設計 - 手機版 */
+@media (max-width: 600px) {
+  .tabs-container {
+    overflow-x: auto;
+    gap: 2px;
+    padding: 4px 4px 0 4px;
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
