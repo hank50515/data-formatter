@@ -49,9 +49,9 @@ export default function ErrorDisplay({
             onClick={onAutoFix}
             disabled={isFixing}
             className="error-message__autofix-button"
-            title="自動修復常見的 JSON 錯誤"
+            title={t('error.autoFixTitle')}
           >
-            {isFixing ? '修復中...' : '🔧 自動修復'}
+            {isFixing ? t('error.fixing') : t('error.autoFix')}
           </button>
         )}
       </div>
@@ -65,7 +65,7 @@ export default function ErrorDisplay({
             color: 'var(--success-color)',
           }}
         >
-          💡 此錯誤可能可以自動修復，點擊上方按鈕嘗試修復
+          {t('error.autoFixHint')}
         </div>
       )}
     </div>

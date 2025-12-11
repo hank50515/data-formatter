@@ -23,6 +23,7 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 import { Tabs } from './components/Tabs';
 import { ControlBar } from './components/JsonPanel/ControlBar';
 import ViewModeSwitcher from './components/JsonPanel/ViewModeSwitcher';
+import DiffPanel from './components/DiffPanel/DiffPanel';
 import './index.css';
 
 const createInitialFormatterState = (format: FormatType): FormatterState => ({
@@ -42,6 +43,7 @@ function App() {
     yaml: createInitialFormatterState('yaml'),
     csv: createInitialFormatterState('csv'),
     sql: createInitialFormatterState('sql'),
+    diff: createInitialFormatterState('diff'),
   });
 
   // User Story 2: 即時驗證狀態
@@ -56,7 +58,7 @@ function App() {
 
   useEffect(() => {
     const saved = localStorage.getItem('data-formatter-active-tab');
-    if (saved && ['json', 'xml', 'yaml', 'csv', 'sql'].includes(saved)) {
+    if (saved && ['json', 'xml', 'yaml', 'csv', 'sql', 'diff'].includes(saved)) {
       setActiveTab(saved as FormatType);
     }
   }, []);
@@ -343,12 +345,27 @@ function App() {
     setValidationResult(result);
   }, [debouncedInput, activeTab]);
 
+  // T089: Keyboard shortcut Ctrl+D to activate Diff tab
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+D (or Cmd+D on Mac) to switch to Diff tab
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        setActiveTab('diff');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const tabs = [
     { key: 'json' as FormatType, label: t('tabs.json') },
     { key: 'xml' as FormatType, label: t('tabs.xml') },
     { key: 'yaml' as FormatType, label: t('tabs.yaml') },
     { key: 'csv' as FormatType, label: t('tabs.csv') },
     { key: 'sql' as FormatType, label: t('tabs.sql') },
+    { key: 'diff' as FormatType, label: t('tabs.diff') },
   ];
 
   return (
@@ -387,20 +404,24 @@ function App() {
       )}
 
       <main className="app-main">
-        <div className="panel-container">
-          <InputPanel
-            value={currentFormatter.input.rawText}
-            onChange={handleInputChange}
-            placeholder={t('input.placeholder')}
-          />
-          <OutputPanel
-            output={currentFormatter.output}
-            validationResult={activeTab === 'json' ? validationResult : null}
-            onAutoFix={activeTab === 'json' ? handleAutoFix : undefined}
-            isFixing={isFixing}
-            viewMode={activeTab === 'json' ? viewMode : 'code'}
-          />
-        </div>
+        {activeTab === 'diff' ? (
+          <DiffPanel />
+        ) : (
+          <div className="panel-container">
+            <InputPanel
+              value={currentFormatter.input.rawText}
+              onChange={handleInputChange}
+              placeholder={t('input.placeholder')}
+            />
+            <OutputPanel
+              output={currentFormatter.output}
+              validationResult={activeTab === 'json' ? validationResult : null}
+              onAutoFix={activeTab === 'json' ? handleAutoFix : undefined}
+              isFixing={isFixing}
+              viewMode={activeTab === 'json' ? viewMode : 'code'}
+            />
+          </div>
+        )}
       </main>
 
       <footer className="app-footer">

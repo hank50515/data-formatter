@@ -27,7 +27,11 @@
     "locationFull": "位置：第 {{line}} 行, 第 {{column}} 列",
     "sizeLimit": "輸入檔案過大（{{size}} MB），最大支援 1 MB",
     "invalidFormat": "無法偵測格式，請確認輸入為有效的 JSON 資料",
-    "unknown": "發生未知錯誤"
+    "unknown": "發生未知錯誤",
+    "autoFix": "🔧 自動修復",
+    "fixing": "修復中...",
+    "autoFixHint": "💡 此錯誤可能可以自動修復，點擊上方按鈕嘗試修復",
+    "autoFixTitle": "自動修復常見的 JSON 錯誤"
   },
   "language": {
     "switch": "語言",
@@ -45,6 +49,119 @@
     "xml": "XML",
     "yaml": "YAML",
     "csv": "CSV",
-    "sql": "SQL"
+    "sql": "SQL",
+    "diff": "JSON 比對"
+  },
+  "treeView": {
+    "expandAll": "展開全部",
+    "collapseAll": "收合全部",
+    "switchToTree": "切換到樹狀檢視",
+    "noData": "無資料",
+    "loading": "載入中..."
+  },
+  "search": {
+    "placeholder": "在 JSON 中搜尋...",
+    "caseSensitive": "區分大小寫",
+    "wholeWord": "全字匹配",
+    "regex": "正規表示式",
+    "noResults": "找不到結果",
+    "matchCount": "第 {{current}} 個，共 {{total}} 個",
+    "previous": "上一個",
+    "next": "下一個"
+  },
+  "statistics": {
+    "title": "JSON 統計資料",
+    "structure": "結構",
+    "valueTypes": "值類型",
+    "size": "大小",
+    "objectCount": "物件數量",
+    "arrayCount": "陣列數量",
+    "totalKeys": "鍵值總數",
+    "maxDepth": "最大深度",
+    "strings": "字串",
+    "numbers": "數字",
+    "booleans": "布林值",
+    "nulls": "空值",
+    "characters": "字元數",
+    "rawSize": "原始大小"
+  },
+  "viewMode": {
+    "code": "程式碼",
+    "tree": "樹狀",
+    "switchView": "切換檢視"
+  },
+  "controlBar": {
+    "copy": "複製",
+    "clear": "清除",
+    "format": "格式化",
+    "minify": "壓縮",
+    "validate": "驗證"
+  },
+  "common": {
+    "loading": "載入中...",
+    "error": "錯誤",
+    "success": "成功",
+    "confirm": "確認",
+    "cancel": "取消",
+    "clear": "清除"
+  },
+  "diff": {
+    "title": "JSON 比對",
+    "original": "原始檔案",
+    "modified": "修改檔案",
+    "noData": "請在兩側面板輸入 JSON 進行比對",
+    "noDifferences": "未發現差異",
+    "calculating": "正在計算差異...",
+    "viewMode": {
+      "sideBySide": "並排檢視",
+      "unified": "統一檢視",
+      "label": "檢視模式"
+    },
+    "navigation": {
+      "next": "下一個差異",
+      "previous": "上一個差異",
+      "current": "第 {{current}} 個差異，共 {{total}} 個"
+    },
+    "summary": {
+      "title": "差異摘要",
+      "additions": "新增 {{count}} 項",
+      "deletions": "刪除 {{count}} 項",
+      "modifications": "修改 {{count}} 項",
+      "total": "總計 {{count}} 項變更"
+    },
+    "export": {
+      "copyDiff": "複製差異",
+      "exportHtml": "匯出為 HTML",
+      "generatePatch": "產生 JSON Patch",
+      "copied": "已複製到剪貼簿",
+      "exported": "匯出成功"
+    },
+    "errors": {
+      "invalidOriginal": "原始 JSON 格式錯誤",
+      "invalidModified": "修改 JSON 格式錯誤",
+      "diffFailed": "比對計算失敗",
+      "exportFailed": "匯出失敗"
+    },
+    "options": {
+      "ignoreWhitespace": "忽略空白字元",
+      "ignoreArrayOrder": "忽略陣列順序",
+      "syncScroll": "同步捲動"
+    },
+    "clearBoth": "清除兩側",
+    "charDiffMode": "字元",
+    "lineDiffMode": "行",
+    "bothDiffMode": "兩者",
+    "clearConfirm": "確定要清除兩側輸入嗎？",
+    "cleared": "已清除兩側輸入",
+    "clearing": "清除中...",
+    "highlightMode": {
+      "label": "差異粒度"
+    },
+    "colorScheme": {
+      "label": "配色方案",
+      "standard": "標準",
+      "highContrast": "高對比",
+      "colorblindSafe": "色盲友善"
+    }
   }
 }

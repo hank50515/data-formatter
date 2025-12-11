@@ -13,6 +13,7 @@
   --border-color: #ddd;
   --error-color: #e74c3c;
   --success-color: #27ae60;
+  --focus-color: #4a90e2;
 
   /* 間距變數 */
   --spacing-xs: 0.5rem;
@@ -20,8 +21,8 @@
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
 
-  /* 字體 */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* 字體 - T005: 新增中文字型後備 */
+  font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', 'Source Han Sans', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: var(--text-color);
 }
@@ -41,22 +42,22 @@ body {
   overflow: hidden;
 }
 
-/* 頁首 */
+/* 頁首 - T042-T045: 減少高度 30-40% */
 .app-header {
   background-color: var(--primary-color);
   color: white;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 1rem var(--spacing-lg); /* 原 var(--spacing-md) = 1.5rem，改為 1rem (減少 33%) */
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .app-header h1 {
-  font-size: 2rem;
-  margin-bottom: var(--spacing-xs);
+  font-size: 1.5rem; /* 原 2rem，改為 1.5rem (減少 25%) */
+  margin-bottom: 0.25rem; /* 原 var(--spacing-xs) = 0.5rem，改為 0.25rem (減少 50%) */
 }
 
 .app-header p {
-  font-size: 1rem;
+  font-size: 0.875rem; /* 原 1rem，改為 0.875rem (減少 12.5%) */
   opacity: 0.9;
 }
 
@@ -131,17 +132,97 @@ body {
   min-height: 0;
 }
 
-/* 頁尾 */
+/* 頁尾 - T053-T055: 減少高度 40-50% */
 .app-footer {
   background-color: white;
-  padding: var(--spacing-md);
+  padding: 0.5rem; /* 原 var(--spacing-md) = 1.5rem，改為 0.5rem (減少 67%) */
   text-align: center;
   border-top: 1px solid var(--border-color);
-  font-size: 0.875rem;
+  font-size: 0.75rem; /* 原 0.875rem，改為 0.75rem (12px，減少 14%) */
   color: #666;
+  min-height: 44px; /* T055: Ensure touch target size for links */
 }
 
-/* 響應式設計 */
+/* 響應式設計 - Mobile First Breakpoints (T072) */
+
+/* Mobile Small - 320px to 479px */
+@media (max-width: 479px) {
+  .app-header h1 {
+    font-size: 1.25rem; /* Further reduced for small screens */
+  }
+
+  .app-header p {
+    display: none; /* T046: Hide subtitle on mobile to save space */
+  }
+
+  .app-main {
+    padding: var(--spacing-sm);
+  }
+
+  .panel-container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .panel {
+    padding: var(--spacing-sm);
+    min-height: 250px;
+  }
+}
+
+/* Mobile Medium - 480px to 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+  .app-header h1 {
+    font-size: 1.375rem; /* Adjusted for mobile medium */
+  }
+
+  .app-header p {
+    display: none; /* T046: Hide subtitle on mobile to save space */
+  }
+
+  .panel-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet - 768px to 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .app-header h1 {
+    font-size: 1.375rem; /* T047: Tablet-specific title size */
+  }
+
+  .panel-container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .panel {
+    min-height: 300px;
+    max-height: 50vh;
+  }
+
+  .app-main {
+    overflow-y: auto;
+  }
+}
+
+/* Desktop - 1024px to 1439px */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .panel-container {
+    grid-template-columns: 1fr 1fr;
+    max-width: 1200px;
+  }
+}
+
+/* Large Desktop - 1440px+ */
+@media (min-width: 1440px) {
+  .panel-container {
+    grid-template-columns: 1fr 1fr;
+    max-width: 1400px;
+  }
+}
+
+/* Legacy tablet support */
 @media (max-width: 768px) {
   .panel-container {
     grid-template-columns: 1fr;
@@ -155,6 +236,50 @@ body {
   .app-main {
     overflow-y: auto;
   }
+}
+
+/* 文字處理 - 處理長字串與 URL (T077) */
+.panel,
+.panel textarea,
+.panel pre,
+.panel code,
+.output-content,
+.input-area,
+.diff-viewer,
+.diff-line__content {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Code blocks 允許橫向滾動 */
+pre,
+code {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* 確保所有面板尊重視窗邊界 (T078) */
+.panel,
+.diff-panel,
+.app-main,
+.panel-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* 防止水平溢出 */
+* {
+  max-width: 100%;
+}
+
+/* 允許特定元素橫向滾動 */
+pre,
+code,
+.code-block,
+.json-output {
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* 工具類別 */
@@ -343,22 +468,63 @@ body {
   opacity: 0.6;
 }
 
-/* 響應式設計 */
-@media (max-width: 768px) {
+/* T076: Control Bar 響應式設計 - 防止按鈕溢出 */
+
+/* Mobile Small: 320px to 479px - Full vertical stack */
+@media (max-width: 479px) {
   .control-bar {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
   }
 
+  .control-bar__actions {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .control-bar__button {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile Medium: 480px to 767px - Wrap buttons if needed */
+@media (min-width: 480px) and (max-width: 767px) {
+  .control-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+
+  .control-bar__actions {
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .control-bar__button {
+    flex: 1 1 auto;
+    min-width: 120px;
+    justify-content: center;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Tablet: 768px to 1023px - Horizontal layout with wrap */
+@media (min-width: 768px) and (max-width: 1023px) {
   .control-bar__actions {
     flex-wrap: wrap;
   }
 
   .control-bar__button {
-    flex: 1;
-    min-width: 100px;
-    justify-content: center;
+    padding: 0.5rem 0.9rem;
   }
+}
 
   .indent-selector {
     justify-content: space-between;
@@ -712,8 +878,10 @@ body {
   color: var(--text-color);
 }
 
-/* Responsive Search and Statistics */
-@media (max-width: 768px) {
+/* T074-T075: Responsive Search and Statistics with proper breakpoints */
+
+/* Mobile Small: 320px to 479px - Single column, compact */
+@media (max-width: 479px) {
   .search-bar {
     padding: 0.5rem;
   }
@@ -730,5 +898,754 @@ body {
 
   .statistics-panel__grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
+
+  .statistics-panel {
+    padding: 0.75rem;
+  }
+}
+
+/* Mobile Medium: 480px to 767px - Single column with more spacing */
+@media (min-width: 480px) and (max-width: 767px) {
+  .search-bar {
+    padding: 0.5rem;
+  }
+
+  .search-bar__input {
+    font-size: 0.9rem;
+  }
+
+  .search-bar__results {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .statistics-panel__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Tablet: 768px to 1023px - Two columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .statistics-panel__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Desktop: 1024px to 1439px - Three columns */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .statistics-panel__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Large Desktop: 1440px+ - Three columns with more gap */
+@media (min-width: 1440px) {
+  .statistics-panel__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* T006: 鍵盤導航焦點指示器 - Phase 2 Foundational */
+*:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+.button:focus-visible,
+.control-bar__button:focus-visible,
+.tree-control-btn:focus-visible,
+.mode-btn:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 1px;
+}
+
+/* T007: 載入狀態樣式 - Phase 2 Foundational */
+.loading-spinner {
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 3px solid rgba(74, 144, 226, 0.3);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner--small {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}
+
+.loading-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color) 25%,
+    #e8eaed 50%,
+    var(--secondary-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* T008: 按鈕回饋樣式 (hover, active, disabled) - Phase 2 Foundational */
+button,
+.button,
+.control-bar__button,
+.tree-control-btn,
+.mode-btn {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover:not(:disabled),
+.button:hover:not(:disabled),
+.control-bar__button:hover:not(:disabled),
+.tree-control-btn:hover:not(:disabled),
+.mode-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active:not(:disabled),
+.button:active:not(:disabled),
+.control-bar__button:active:not(:disabled),
+.tree-control-btn:active:not(:disabled),
+.mode-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.1s ease;
+}
+
+button:disabled,
+.button:disabled,
+.control-bar__button:disabled,
+.tree-control-btn:disabled,
+.mode-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #999;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 按鈕點擊水波紋效果 */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+button:active:not(:disabled)::after,
+.button:active:not(:disabled)::after,
+.control-bar__button:active:not(:disabled)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 0.6s ease-out;
+}
+
+/* ========================================
+   PHASE 5: User Story 3 - Enhanced UX
+   ======================================== */
+
+/* T042: 按鈕點擊回饋樣式增強 - TreeView 展開/收合按鈕 */
+.tree-control-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tree-control-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.tree-control-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+.tree-control-btn .icon {
+  transition: transform 0.2s ease;
+}
+
+.tree-control-btn:hover .icon {
+  transform: scale(1.1);
+}
+
+/* T043: 搜尋結果高亮動畫 */
+@keyframes search-highlight {
+  0% {
+    background-color: rgba(255, 235, 59, 0.3);
+    box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.4);
+  }
+  50% {
+    background-color: rgba(255, 235, 59, 0.5);
+    box-shadow: 0 0 0 4px rgba(255, 235, 59, 0.2);
+  }
+  100% {
+    background-color: rgba(255, 235, 59, 0.3);
+    box-shadow: 0 0 0 0 rgba(255, 235, 59, 0);
+  }
+}
+
+.search-result-highlight {
+  animation: search-highlight 1s ease-in-out;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.search-result-current {
+  background-color: rgba(255, 193, 7, 0.6);
+  border-radius: 3px;
+  padding: 0 2px;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.3);
+}
+
+/* T044: 視圖模式切換過渡動畫 */
+.view-mode-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.view-mode-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.view-mode-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.view-mode-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* T045: 統計面板卡片樣式改善 */
+.statistics-panel__section {
+  transition: all 0.2s ease;
+}
+
+.statistics-panel__section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-panel__section-title {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.statistics-panel__section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.statistics-panel__item {
+  transition: background-color 0.2s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin: 0 -0.5rem;
+}
+
+.statistics-panel__item:hover {
+  background-color: rgba(74, 144, 226, 0.05);
+}
+
+/* T046: 長操作載入指示器 - 統計面板 */
+.statistics-panel__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  flex-direction: column;
+}
+
+.statistics-panel__spinner {
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+.statistics-panel__loading-text {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* T047: 搜尋導航視覺回饋 - 當前匹配高亮 */
+.search-bar__nav-btn {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.search-bar__nav-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.search-bar__nav-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.search-bar__nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.search-bar__count {
+  font-weight: 600;
+  color: var(--primary-color);
+  transition: all 0.2s ease;
+}
+
+.search-bar__count:hover {
+  transform: scale(1.05);
+}
+
+/* T048: TreeView 控制項圖示增強 */
+.tree-control-btn .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.25rem;
+}
+
+/* T049: 搜尋導航方向圖示 */
+.search-bar__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.search-bar__nav-btn::before {
+  transition: transform 0.2s ease;
+}
+
+.search-bar__nav-btn:hover::before {
+  transform: translateY(-2px);
+}
+
+/* T050: 統計面板分組改善 */
+.statistics-panel__grid {
+  gap: 1.25rem;
+}
+
+.statistics-panel__section {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid rgba(74, 144, 226, 0.1);
+}
+
+.statistics-panel__section--full {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+/* T051: ViewModeSwitcher 活動狀態樣式增強 */
+.mode-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-btn.active {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  font-weight: 600;
+  transform: translateY(-1px);
+}
+
+.mode-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px 2px 0 0;
+}
+
+.mode-btn:not(.active):hover {
+  background-color: rgba(74, 144, 226, 0.15);
+}
+
+/* T052-T054: 響應式設計斷點 */
+
+/* T052: 行動裝置 (≤480px) - SearchBar 垂直排列 */
+@media (max-width: 480px) {
+  .search-bar {
+    padding: 0.5rem;
+  }
+
+  .search-bar__input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar__input {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .search-bar__options {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .search-bar__results {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .search-bar__navigation {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .tree-view-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tree-control-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .view-mode-switcher {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .mode-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .control-bar__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .control-bar__button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* T053: 平板 (≤768px) - StatisticsPanel 雙欄佈局 */
+@media (max-width: 768px) {
+  .statistics-panel__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .statistics-panel__section--full {
+    grid-column: 1 / -1;
+  }
+
+  .search-bar__results {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .tree-view-controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* T054: 桌面 (≥1025px) - StatisticsPanel 三欄佈局 */
+@media (min-width: 1025px) {
+  .statistics-panel__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .statistics-panel__section--full {
+    grid-column: 1 / -1;
+  }
+
+  /* 桌面版增強效果 */
+  .tree-view-controls {
+    gap: 1rem;
+  }
+
+  .search-bar {
+    padding: 1rem;
+  }
+
+  .statistics-panel {
+    padding: 1.5rem;
+  }
+}
+
+/* T055: 最小寬度 320px 測試 - 確保所有元素可讀 */
+@media (max-width: 320px) {
+  .search-bar__input {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+
+  .tree-control-btn {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .statistics-panel__title {
+    font-size: 1rem;
+  }
+
+  .statistics-panel__section-title {
+    font-size: 0.85rem;
+  }
+
+  .statistics-panel__item {
+    font-size: 0.8rem;
+  }
+
+  .mode-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .control-bar__button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .control-bar__button-text {
+    display: none; /* 只顯示圖示節省空間 */
+  }
+}
+
+/* 平滑滾動改善 */
+.tree-view-content,
+.statistics-panel {
+  scroll-behavior: smooth;
+}
+
+/* 過渡效果優化 - 減少動畫以提升效能 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   PHASE 6: User Story 4 - Accessibility
+   ======================================== */
+
+/* T060: 增強所有按鈕的鍵盤焦點指示器 */
+button:focus-visible,
+.button:focus-visible,
+.control-bar__button:focus-visible,
+.tree-control-btn:focus-visible,
+.mode-btn:focus-visible,
+.search-bar__nav-btn:focus-visible,
+.search-bar__clear-btn:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(74, 144, 226, 0.25);
+  z-index: 1;
+}
+
+/* 輸入欄位焦點增強 */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15);
+}
+
+/* 複選框焦點增強 */
+input[type="checkbox"]:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+}
+
+/* T065-T066: 色彩對比度驗證與修復 (WCAG 2.1 AA - 4.5:1) */
+
+/* 確保主要文字對比度 >= 4.5:1 */
+:root {
+  --text-color: #212529; /* 提升對比度 from #333 to #212529 */
+  --text-secondary: #495057; /* 次要文字顏色 */
+}
+
+body {
+  color: var(--text-color);
+}
+
+/* 確保錯誤訊息對比度 */
+.error-message {
+  color: #c82333; /* 提升對比度 from #e74c3c */
+  background-color: #f8d7da;
+  border-left-color: #c82333;
+}
+
+/* 確保成功訊息對比度 */
+.success-message {
+  color: #1e7e34; /* 提升對比度 from #27ae60 */
+  background-color: #d4edda;
+  border-left-color: #1e7e34;
+}
+
+/* 確保連結和互動元素對比度 */
+a,
+.app-header h1,
+.panel h2 {
+  color: #0056b3; /* 提升對比度以達到 4.5:1 */
+}
+
+/* 確保按鈕文字對比度 */
+.control-bar__button,
+.tree-control-btn,
+.mode-btn {
+  color: #212529; /* 確保深色背景時文字可讀 */
+}
+
+.control-bar__button:disabled,
+.tree-control-btn:disabled,
+.mode-btn:disabled {
+  color: #6c757d; /* 禁用狀態保持 4.5:1 對比度 */
+  background-color: #e9ecef;
+}
+
+/* 次要文字顏色對比度 */
+.statistics-panel__label,
+.search-bar__no-results {
+  color: var(--text-secondary);
+}
+
+/* 確保搜尋計數文字對比度 */
+.search-bar__count {
+  color: #0056b3;
+  font-weight: 600;
+}
+
+/* Skip to main content link (for keyboard navigation) */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  z-index: 100;
+  transition: top 0.3s ease;
+}
+
+.skip-to-main:focus {
+  top: 0;
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+
+/* 確保 placeholder 文字對比度 */
+input::placeholder,
+textarea::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+/* 高對比度模式支援 */
+@media (prefers-contrast: high) {
+  :root {
+    --text-color: #000;
+    --border-color: #000;
+    --primary-color: #0000ff;
+  }
+
+  button,
+  .button {
+    border: 2px solid currentColor;
+  }
+
+  .statistics-panel__section {
+    border: 2px solid var(--border-color);
+  }
+}
+
+/* 螢幕閱讀器專用文字 (視覺上隱藏但可被讀取) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* 可聚焦時顯示 sr-only 內容 */
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }

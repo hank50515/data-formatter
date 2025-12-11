@@ -3,6 +3,7 @@
  * 提供清除、格式化、壓縮等操作按鈕
  */
 
+import { useTranslation } from 'react-i18next';
 import { IndentSelector } from './IndentSelector';
 import type { IndentSize } from '../../types/json-advanced';
 
@@ -30,6 +31,7 @@ export function ControlBar({
   disabled = false,
   hasInput = false,
 }: ControlBarProps) {
+  const { t } = useTranslation();
   return (
     <div className="control-bar">
       {/* 縮排選擇器 */}
@@ -45,33 +47,33 @@ export function ControlBar({
           onClick={onClear}
           disabled={!hasInput}
           className="control-bar__button control-bar__button--clear"
-          aria-label="清除所有資料"
-          title="清除所有資料 (Ctrl+K)"
+          aria-label={t('controlBar.clear')}
+          title={`${t('controlBar.clear')} (Ctrl+K)`}
         >
           <span className="control-bar__button-icon">🗑️</span>
-          <span className="control-bar__button-text">清除</span>
+          <span className="control-bar__button-text">{t('controlBar.clear')}</span>
         </button>
 
         <button
           onClick={onFormat}
           disabled={disabled || !hasInput}
           className="control-bar__button control-bar__button--format"
-          aria-label="格式化 JSON"
-          title="格式化 JSON (Ctrl+B)"
+          aria-label={t('controlBar.format')}
+          title={`${t('controlBar.format')} (Ctrl+B)`}
         >
           <span className="control-bar__button-icon">✨</span>
-          <span className="control-bar__button-text">格式化</span>
+          <span className="control-bar__button-text">{t('controlBar.format')}</span>
         </button>
 
         <button
           onClick={onMinify}
           disabled={disabled || !hasInput}
           className="control-bar__button control-bar__button--minify"
-          aria-label="壓縮 JSON"
-          title="壓縮 JSON (Ctrl+M)"
+          aria-label={t('controlBar.minify')}
+          title={`${t('controlBar.minify')} (Ctrl+M)`}
         >
           <span className="control-bar__button-icon">📦</span>
-          <span className="control-bar__button-text">壓縮</span>
+          <span className="control-bar__button-text">{t('controlBar.minify')}</span>
         </button>
       </div>
     </div>

@@ -27,7 +27,11 @@
     "locationFull": "Location: Line {{line}}, Column {{column}}",
     "sizeLimit": "Input file too large ({{size}} MB), maximum supported is 1 MB",
     "invalidFormat": "Unable to detect format, please ensure input is valid JSON data",
-    "unknown": "An unknown error occurred"
+    "unknown": "An unknown error occurred",
+    "autoFix": "🔧 Auto Fix",
+    "fixing": "Fixing...",
+    "autoFixHint": "💡 This error may be automatically fixable, click the button above to try",
+    "autoFixTitle": "Automatically fix common JSON errors"
   },
   "language": {
     "switch": "Language",
@@ -45,6 +49,119 @@
     "xml": "XML",
     "yaml": "YAML",
     "csv": "CSV",
-    "sql": "SQL"
+    "sql": "SQL",
+    "diff": "JSON Diff"
+  },
+  "treeView": {
+    "expandAll": "Expand All",
+    "collapseAll": "Collapse All",
+    "switchToTree": "Switch to Tree View",
+    "noData": "No Data",
+    "loading": "Loading..."
+  },
+  "search": {
+    "placeholder": "Search in JSON...",
+    "caseSensitive": "Case Sensitive",
+    "wholeWord": "Whole Word",
+    "regex": "Regular Expression",
+    "noResults": "No results found",
+    "matchCount": "{{current}} of {{total}}",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "statistics": {
+    "title": "JSON Statistics",
+    "structure": "Structure",
+    "valueTypes": "Value Types",
+    "size": "Size",
+    "objectCount": "Objects",
+    "arrayCount": "Arrays",
+    "totalKeys": "Total Keys",
+    "maxDepth": "Max Depth",
+    "strings": "Strings",
+    "numbers": "Numbers",
+    "booleans": "Booleans",
+    "nulls": "Nulls",
+    "characters": "Characters",
+    "rawSize": "Raw Size"
+  },
+  "viewMode": {
+    "code": "Code",
+    "tree": "Tree",
+    "switchView": "Switch View"
+  },
+  "controlBar": {
+    "copy": "Copy",
+    "clear": "Clear",
+    "format": "Format",
+    "minify": "Minify",
+    "validate": "Validate"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "clear": "Clear"
+  },
+  "diff": {
+    "title": "JSON Diff",
+    "original": "Original",
+    "modified": "Modified",
+    "noData": "Enter JSON in both panels to compare",
+    "noDifferences": "No differences found",
+    "calculating": "Calculating differences...",
+    "viewMode": {
+      "sideBySide": "Side by Side",
+      "unified": "Unified",
+      "label": "View Mode"
+    },
+    "navigation": {
+      "next": "Next Difference",
+      "previous": "Previous Difference",
+      "current": "Difference {{current}} of {{total}}"
+    },
+    "summary": {
+      "title": "Summary",
+      "additions": "{{count}} additions",
+      "deletions": "{{count}} deletions",
+      "modifications": "{{count}} modifications",
+      "total": "{{count}} changes total"
+    },
+    "export": {
+      "copyDiff": "Copy Diff",
+      "exportHtml": "Export as HTML",
+      "generatePatch": "Generate JSON Patch",
+      "copied": "Copied to clipboard",
+      "exported": "Exported successfully"
+    },
+    "errors": {
+      "invalidOriginal": "Invalid JSON in Original",
+      "invalidModified": "Invalid JSON in Modified",
+      "diffFailed": "Diff calculation failed",
+      "exportFailed": "Export failed"
+    },
+    "options": {
+      "ignoreWhitespace": "Ignore Whitespace",
+      "ignoreArrayOrder": "Ignore Array Order",
+      "syncScroll": "Sync Scroll"
+    },
+    "clearBoth": "Clear Both",
+    "charDiffMode": "Char",
+    "lineDiffMode": "Line",
+    "bothDiffMode": "Both",
+    "clearConfirm": "Are you sure you want to clear both inputs?",
+    "cleared": "Both inputs cleared",
+    "clearing": "Clearing...",
+    "highlightMode": {
+      "label": "Granularity"
+    },
+    "colorScheme": {
+      "label": "Color Scheme",
+      "standard": "Standard",
+      "highContrast": "High Contrast",
+      "colorblindSafe": "Colorblind Safe"
+    }
   }
 }

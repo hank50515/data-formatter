@@ -1,10 +1,21 @@
 /**
- * Statistics Panel Component
- * Displays structural statistics for JSON data
- * User Story 4: Search and Data Statistics
+ * StatisticsPanel 元件
+ * 顯示 JSON 資料的結構統計資訊（結構、值類型、大小）
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <StatisticsPanel jsonText={jsonString} isVisible={true} />
+ * ```
+ *
+ * 統計資訊包含：
+ * - 結構：物件數量、陣列數量、鍵值總數、最大深度
+ * - 值類型：字串、數字、布林值、空值計數
+ * - 大小：總行數、字元數、檔案大小
  */
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   calculateJSONStatistics,
   formatStatistics,
@@ -13,14 +24,25 @@ import {
 import type { JSONStatistics } from '../../types/json-advanced';
 
 interface StatisticsPanelProps {
+  /** JSON 文字內容 */
   jsonText: string;
+  /** 是否顯示面板（預設：true） */
   isVisible?: boolean;
 }
 
+/**
+ * StatisticsPanel 元件實作
+ * 非同步計算統計資訊（100ms 延遲），避免阻塞 UI
+ * 使用 React.memo 優化效能
+ *
+ * @param {StatisticsPanelProps} props - 元件屬性
+ * @returns {React.ReactElement | null} StatisticsPanel 元件
+ */
 const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   jsonText,
   isVisible = true,
 }) => {
+  const { t } = useTranslation();
   const [statistics, setStatistics] = useState<JSONStatistics | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
 
@@ -49,9 +71,9 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   if (!jsonText.trim()) {
     return (
       <div className="statistics-panel statistics-panel--empty">
-        <h3 className="statistics-panel__title">📊 Statistics</h3>
+        <h3 className="statistics-panel__title">📊 {t('statistics.title')}</h3>
         <p className="statistics-panel__empty-message">
-          No data to analyze
+          {t('treeView.noData')}
         </p>
       </div>
     );
@@ -60,10 +82,10 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   if (isCalculating) {
     return (
       <div className="statistics-panel">
-        <h3 className="statistics-panel__title">📊 Statistics</h3>
+        <h3 className="statistics-panel__title">📊 {t('statistics.title')}</h3>
         <div className="statistics-panel__loading">
           <span className="statistics-panel__spinner">⏳</span>
-          <span>Calculating...</span>
+          <span>{t('common.loading')}</span>
         </div>
       </div>
     );
@@ -72,9 +94,9 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   if (!statistics) {
     return (
       <div className="statistics-panel statistics-panel--error">
-        <h3 className="statistics-panel__title">📊 Statistics</h3>
+        <h3 className="statistics-panel__title">📊 {t('statistics.title')}</h3>
         <p className="statistics-panel__error-message">
-          Unable to calculate statistics
+          {t('common.error')}
         </p>
       </div>
     );
@@ -84,71 +106,71 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({
   const sizeMetrics = calculateSizeMetrics(jsonText);
 
   return (
-    <div className="statistics-panel">
-      <h3 className="statistics-panel__title">📊 JSON Statistics</h3>
+    <div className="statistics-panel" role="region" aria-label={t('statistics.title')}>
+      <h3 className="statistics-panel__title" id="stats-title">📊 {t('statistics.title')}</h3>
 
-      <div className="statistics-panel__grid">
+      <div className="statistics-panel__grid" role="group" aria-labelledby="stats-title">
         {/* Structure stats */}
-        <div className="statistics-panel__section">
-          <h4 className="statistics-panel__section-title">Structure</h4>
+        <div className="statistics-panel__section" role="group" aria-labelledby="stats-structure">
+          <h4 className="statistics-panel__section-title" id="stats-structure">{t('statistics.structure')}</h4>
           <div className="statistics-panel__items">
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Objects:</span>
-              <span className="statistics-panel__value">{formattedStats['Objects']}</span>
+              <span className="statistics-panel__label">{t('statistics.objectCount')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Objects']} ${t('statistics.objectCount')}`}>{formattedStats['Objects']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Arrays:</span>
-              <span className="statistics-panel__value">{formattedStats['Arrays']}</span>
+              <span className="statistics-panel__label">{t('statistics.arrayCount')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Arrays']} ${t('statistics.arrayCount')}`}>{formattedStats['Arrays']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Key-Value Pairs:</span>
-              <span className="statistics-panel__value">{formattedStats['Key-Value Pairs']}</span>
+              <span className="statistics-panel__label">{t('statistics.totalKeys')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Key-Value Pairs']} ${t('statistics.totalKeys')}`}>{formattedStats['Key-Value Pairs']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Max Depth:</span>
-              <span className="statistics-panel__value">{formattedStats['Max Depth']}</span>
+              <span className="statistics-panel__label">{t('statistics.maxDepth')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Max Depth']} ${t('statistics.maxDepth')}`}>{formattedStats['Max Depth']}</span>
             </div>
           </div>
         </div>
 
         {/* Value types stats */}
-        <div className="statistics-panel__section">
-          <h4 className="statistics-panel__section-title">Value Types</h4>
+        <div className="statistics-panel__section" role="group" aria-labelledby="stats-types">
+          <h4 className="statistics-panel__section-title" id="stats-types">{t('statistics.valueTypes')}</h4>
           <div className="statistics-panel__items">
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Strings:</span>
-              <span className="statistics-panel__value">{formattedStats['Strings']}</span>
+              <span className="statistics-panel__label">{t('statistics.strings')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Strings']} ${t('statistics.strings')}`}>{formattedStats['Strings']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Numbers:</span>
-              <span className="statistics-panel__value">{formattedStats['Numbers']}</span>
+              <span className="statistics-panel__label">{t('statistics.numbers')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Numbers']} ${t('statistics.numbers')}`}>{formattedStats['Numbers']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Booleans:</span>
-              <span className="statistics-panel__value">{formattedStats['Booleans']}</span>
+              <span className="statistics-panel__label">{t('statistics.booleans')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Booleans']} ${t('statistics.booleans')}`}>{formattedStats['Booleans']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Nulls:</span>
-              <span className="statistics-panel__value">{formattedStats['Nulls']}</span>
+              <span className="statistics-panel__label">{t('statistics.nulls')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Nulls']} ${t('statistics.nulls')}`}>{formattedStats['Nulls']}</span>
             </div>
           </div>
         </div>
 
         {/* Size stats */}
-        <div className="statistics-panel__section statistics-panel__section--full">
-          <h4 className="statistics-panel__section-title">Size</h4>
+        <div className="statistics-panel__section statistics-panel__section--full" role="group" aria-labelledby="stats-size">
+          <h4 className="statistics-panel__section-title" id="stats-size">{t('statistics.size')}</h4>
           <div className="statistics-panel__items">
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Total Lines:</span>
-              <span className="statistics-panel__value">{formattedStats['Total Lines']}</span>
+              <span className="statistics-panel__label">{t('output.lines')}:</span>
+              <span className="statistics-panel__value" aria-label={`${formattedStats['Total Lines']} ${t('output.lines')}`}>{formattedStats['Total Lines']}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">Characters:</span>
-              <span className="statistics-panel__value">{sizeMetrics.characters.toLocaleString()}</span>
+              <span className="statistics-panel__label">{t('statistics.characters')}:</span>
+              <span className="statistics-panel__value" aria-label={`${sizeMetrics.characters.toLocaleString()} ${t('statistics.characters')}`}>{sizeMetrics.characters.toLocaleString()}</span>
             </div>
             <div className="statistics-panel__item">
-              <span className="statistics-panel__label">File Size:</span>
-              <span className="statistics-panel__value">{sizeMetrics.sizeFormatted}</span>
+              <span className="statistics-panel__label">{t('statistics.rawSize')}:</span>
+              <span className="statistics-panel__value" aria-label={`${sizeMetrics.sizeFormatted} ${t('statistics.rawSize')}`}>{sizeMetrics.sizeFormatted}</span>
             </div>
           </div>
         </div>

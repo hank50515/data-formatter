@@ -1,5 +1,5 @@
-// 格式類型 - 支援 5 種資料格式
-export type FormatType = 'json' | 'xml' | 'yaml' | 'csv' | 'sql';
+// 格式類型 - 支援 6 種資料格式（新增 diff）
+export type FormatType = 'json' | 'xml' | 'yaml' | 'csv' | 'sql' | 'diff';
 
 // 錯誤類型
 export type ErrorType =
@@ -80,3 +80,6 @@ export interface SampleData {
 export const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 export const CSV_MAX_PREVIEW_ROWS = 100; // CSV 表格預覽最多 100 列
 export const DEFAULT_INDENT = '  '; // 2 空格縮排
+
+// Export diff types
+export * from './diff';
